@@ -1,12 +1,10 @@
 <body>	
 	<div>
 		<h2>Summary</h2>
-		LOLCODE is an esoteric programming language inspired by lolspeak, the language expressed in examples of the lolcat Internet meme.The language was created in 2007 by Adam Lindsay, researcher at the Computing Department of Lancaster University.
-
-		These short snippets show how Scala empowers you to create new embedded domain specific languages with its powerfull features.
-
-		This short DSL allows you to write lolcode with this appearence:
-		<code>
+		<p>LOLCODE is an esoteric programming language inspired by lolspeak, the language expressed in examples of the lolcat Internet meme.The language was created in 2007 by Adam Lindsay, researcher at the Computing Department of Lancaster University.
+		These short snippets show how Scala empowers you to create new embedded domain specific languages with its powerfull features.</p>
+		<p>This short DSL allows you to write lolcode with this appearence:</p>
+		<pre><code>
 			val myProgram =
 				HAI (
 					CAN HAS STDIO ?,
@@ -19,44 +17,38 @@
 				) KTHXBYE
 
 			run(myProgram)
-		</code>
-		It's not exactly the same syntax, but it works for taking account of provided mechanisms to do so.
+		</code></pre>
+		<p>It's not exactly the same syntax, but it works for taking account of provided mechanisms to do so.</p>
 	</div>
 	<div>
 		<h2>Example: CAN HAZ STDIO ?</h2>
-		For instance, if we want to create a statement that represents the effect of importing a library, in LOLCODE it's used <code>CAN HAZ STDIO ?</code>.
-
-		Using infix syntax, we can build the first part of the statement with <code> object CAN { def HAS(x: X): Y = ??? }</code>.
-
-		You can notice 'HAS' method needs some way to set which library we need.
-		So 'X' type should be 'Library': 
-		<code> 
+		<p>For instance, if we want to create a statement that represents the effect of importing a library, in LOLCODE it's used <code>CAN HAZ STDIO ?</code>.</p>
+		<p>Using infix syntax, we can build the first part of the statement with <code> object CAN { def HAS(x: X): Y = ??? }</code>.</p>
+		<p>You can notice 'HAS' method needs some way to set which library we need.
+		So 'X' type should be 'Library': </p>
+		<pre><code> 
 			trait Library { val name: String }
 			object CAN { def HAS(library: Library): Y = ??? }
-		</code>.
-
-		By now, we could call CAN HAS STDIO if we declared a 
-		<code>
+		</code></pre>
+		<p>By now, we could call CAN HAS STDIO if we declared a </p>
+		<pre><code>
 			case object STDIO extends Library { val name = "stdio" }
-		</code>, but there's still missing the interrogation mark. How can we achieve this? By using a helper class like this:
-
-		<code>
+		</code></pre>
+		<p>But there's still missing the interrogation mark. How can we achieve this? By using a helper class like this:</p>
+		<pre><code>
 			class Can(l: Library) {
 				def ?: Statement = ???
 			} 
-		</code>
-
-		We can now build a whole new statement and at the end we should have:
-
-		<code> 
+		</code></pre>
+		<p>We can now build a whole new statement and at the end we should have:</p>
+		<pre><code> 
 			class Can(l: Library){
 				def ? : Statement = ImportStatement(l)
 			}
 			object CAN {
 				def HAS(library: Library): Can = new Can(library)
 			}
-		</code>
-
-		If you enjoyed this example, feel free to have a look on the other statements at source code.
+		</code></pre>
+		<p>If you enjoyed this example, feel free to have a look on the other statements at source code.</p>
 	</div>
 </body>
