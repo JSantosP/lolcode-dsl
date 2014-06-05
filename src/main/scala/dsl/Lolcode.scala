@@ -7,7 +7,7 @@ object LolCode extends statements {
     *   CAN HAS <library:String> ?
     */
   class Can(l: Library){
-    def ? : Statement = ImportStatement(l)
+    def ? : ConsoleStatement = ImportStatement(l)
   }
   object CAN {
     def HAS(library: Library): Can = new Can(library)
@@ -18,7 +18,7 @@ object LolCode extends statements {
     *   PLZ OPEN FILE <fileName:String> ?
     */
   class Plz(f: File){
-    def ? : Statement = OpenFileStatement(f)
+    def ? : ConsoleStatement = OpenFileStatement(f)
   }
   object PLZ {
     def OPEN(file: File): Plz = new Plz(file)
@@ -33,9 +33,9 @@ object LolCode extends statements {
     *    VISIBLE FILE
     */
   object VISIBLE{
-    def apply(s: String): Statement =
+    def apply(s: String): ConsoleStatement =
       PrintStatement(s,visible=true)
-    def FILE: Statement = 
+    def FILE: ConsoleStatement = 
       PrintFileStatement(visible=true)
   }
 
@@ -44,9 +44,9 @@ object LolCode extends statements {
     *   INVISIBLE <error: String>
     */
   object INVISIBLE{
-    def apply(msg: String): Statement = 
+    def apply(msg: String): ConsoleStatement = 
       PrintStatement(msg,visible=false)
-    def FILE: Statement = 
+    def FILE: ConsoleStatement = 
       PrintFileStatement(visible=false)
   }
 
@@ -55,13 +55,13 @@ object LolCode extends statements {
     *   AWSUM THX { <okCondition: Statement> } O_NOES { <exceptionCondition: Statement> }
     */
   object AWSUM{
-    def THX(okStatement: Statement) = new ConditionalExecution(okStatement)
+    def THX(okStatement: ConsoleStatement) = new ConditionalExecution(okStatement)
   }
 
   // Helpers
 
   object HAI {
-    def apply(statements: Statement*): Program = 
+    def apply(statements: ConsoleStatement*): Program = 
       Program(Map(),statements)
   }
 

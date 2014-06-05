@@ -1,11 +1,11 @@
 <body>	
 	<div>
-		<h2>Summary</h2>
+		<h2>What is LolCode ?</h2>
 		<p>LOLCODE is an esoteric programming language inspired by lolspeak, the language expressed in examples of the lolcat Internet meme.The language was created in 2007 by Adam Lindsay, researcher at the Computing Department of Lancaster University.
 		These short snippets show how Scala empowers you to create new embedded domain specific languages with its powerfull features.</p>
-		<p>This short DSL allows you to write lolcode with this appearence:</p>
+		<p>This short DSL allows you to write and execute lolcode with this appearence:</p>
 		<pre><code>
-			val myProgram =
+			"val myProgram =
 				HAI (
 					CAN HAS STDIO ?,
 					PLZ OPEN FILE("LOLCATS.TXT") ?,
@@ -14,21 +14,42 @@
 					} O_NOES {
 						INVISIBLE ("ERROR!")
 					}
-				) KTHXBYE
-
-			run(myProgram)
+				) KTHXBYE"
 		</code></pre>
-		<p>It's not exactly the same syntax, but it works for taking account of provided mechanisms to do so.</p>
+		<p>It's not exactly the same syntax, I know, but it works for taking account of provided mechanisms to do this embedding process.</p>
 	</div>
 	<div>
-		<h2>Example: CAN HAZ STDIO ?</h2>
-		<p>For instance, if we want to create a statement that represents the effect of importing a library, in LOLCODE it's used <code>CAN HAZ STDIO ?</code>.</p>
+		<h2>The reactive interpreter</h2>
+		<p>The interpreter for processing this kind of programs has been thought as an actor that receives a program with a set of statements. If you can imagine a program as a stateful value with some environment, imported libraries and so, then it's possible to design an interpreter like this</p>
+		<pre><code>
+			"class Interpreter(logger: ActorRef) extends Actor {
+			  def receive = {
+			    case program: Program => 
+			      if (!program.isSyntaxOk) 
+			      	sender ! WrongSyntax(program)
+			      else program.statements.toList match {
+			      	case (head::tail) => 
+			      		val (updatedProgram,output) = head.execute(
+			      			program.copy(statements=program.statements.tail))
+			      		logger ! output
+			      		self ! updatedProgram
+			      	case _ => 
+			      		logger ! Finished(program)
+			      }
+			  }
+			}"
+		</code></pre>
+		<p>This way, the basic mechanism to process a program is to perform the execution of each statement and sending to itself the same program but updated without the executed statment. Ah, and it also sends the output of last execution to some logger actor.</p>
+	</div>
+	<div>
+		<h2>DSL Example: CAN HAS STDIO ?</h2>
+		<p>For instance, if we want to create a statement that represents the effect of importing a library, in LOLCODE it's used <code>CAN HAS STDIO ?</code>.</p>
 		<p>Using infix syntax, we can build the first part of the statement with <code> object CAN { def HAS(x: X): Y = ??? }</code>.</p>
 		<p>You can notice 'HAS' method needs some way to set which library we need.
 		So 'X' type should be 'Library': </p>
 		<pre><code> 
-			trait Library { val name: String }
-			object CAN { def HAS(library: Library): Y = ??? }
+			"trait Library { val name: String }
+			object CAN { def HAS(library: Library): Y = ??? }"
 		</code></pre>
 		<p>By now, we could call CAN HAS STDIO if we declared a </p>
 		<pre><code>
@@ -36,18 +57,18 @@
 		</code></pre>
 		<p>But there's still missing the interrogation mark. How can we achieve this? By using a helper class like this:</p>
 		<pre><code>
-			class Can(l: Library) {
+			"class Can(l: Library) {
 				def ?: Statement = ???
-			} 
+			}"
 		</code></pre>
 		<p>We can now build a whole new statement and at the end we should have:</p>
 		<pre><code> 
-			class Can(l: Library){
+			"class Can(l: Library){
 				def ? : Statement = ImportStatement(l)
 			}
 			object CAN {
 				def HAS(library: Library): Can = new Can(library)
-			}
+			}"
 		</code></pre>
 		<p>If you enjoyed this example, feel free to have a look on the other statements at source code.</p>
 	</div>

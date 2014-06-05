@@ -14,23 +14,29 @@ trait Library{
   */
 case class Program (
   val env: Map[String, Any],
-  val statements: Seq[Statement],
+  val statements: Seq[Statement[_]],
   val imports: Set[Library] = Set(), 
   val isSyntaxOk: Boolean = false,
   val exceptionThrown: Boolean = false){
 }
 
-/** A Statement acts just like a state transformer when it's executed*/
-trait Statement{
-  def execute(implicit context: Program):Program
+/** 
+  * A Statement acts just like a state transformer when it's executed.
+  * It returns the updated program and some output.
+  */
+trait Statement[Output]{
+  def execute(implicit context: Program):(Program,Output)
 }
+
+/** A special kind of statement that always return a string as output */
+trait ConsoleStatement extends Statement[String]
 
 object common {
 
-  def run(program: Program): Program =
-    if (!program.isSyntaxOk) program
-    else (program /: program.statements)((context, statement) =>
-      statement.execute(context))
+  // Messages
+
+  case class Finished(program: Program)
+  case class WrongSyntax(program: Program)
 
   // Libraries
 
@@ -38,8 +44,8 @@ object common {
 
   // Helpers
 
-  implicit def emptyStatement(u: Unit): Statement = new Statement{
-    def execute(implicit context: Program):Program = context
+  implicit def emptyStatement(u: Unit): ConsoleStatement = new ConsoleStatement{
+    def execute(implicit context: Program) = (context,"DUNNO WAT TO DO")
   }
 
 }

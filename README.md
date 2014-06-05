@@ -16,10 +16,26 @@ val myProgram =
 			INVISIBLE ("ERROR!")
 		}
 	) KTHXBYE
-
-run(myProgram)
 ```
 It's not exactly the same syntax, but it works for taking account of provided mechanisms to do so.
+If you want to run this code (yes,thanks!) you can use the reactive interpreter like this
+```
+val system = ActorSystem("MyActorSystem")
+
+/** A dummy logger to print out all traces */
+val logger = system.actorOf(Props(new Actor{
+  def receive = {
+    case msg => 
+      println(msg)
+  }
+}))
+
+/** Lolcode interpreter */
+val interpreter = 
+  system.actorOf(Props(new Interpreter(logger)))
+
+interpreter ! myProgram
+```
 
 If you want to have a look you can clone this project with
 ```
@@ -28,7 +44,7 @@ git clone https://github.com/JSantosP/lolcode-dsl.git
 
 If you want to see whether LolCode works reading a file (open your seat belt!) you can check it by executing
 ```
-sbt test:run
+sbt run
 ```
 
 [LOLCODE]:http://en.wikipedia.org/wiki/LOLCODE
