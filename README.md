@@ -1,5 +1,7 @@
 # Scala LolCode DSL
 
+[![Build Status](https://travis-ci.org/JSantosP/lolcode-dsl.svg?branch=master)](https://travis-ci.org/JSantosP/lolcode-dsl)
+
 [LOLCODE] is an esoteric programming language inspired by lolspeak, the language expressed in examples of the lolcat Internet meme.The language was created in 2007 by Adam Lindsay, researcher at the Computing Department of Lancaster University.
 
 These short snippets show how Scala empowers you to create new embedded domain specific languages with its powerfull features.
