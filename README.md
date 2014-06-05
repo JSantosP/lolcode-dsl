@@ -5,7 +5,7 @@
 These short snippets show how Scala empowers you to create new embedded domain specific languages with its powerfull features.
 
 This short DSL allows you to write lolcode with this appearence:
-```
+```scala
 val myProgram =
 	HAI (
 		CAN HAS STDIO ?,
@@ -19,7 +19,7 @@ val myProgram =
 ```
 It's not exactly the same syntax, but it works for taking account of provided mechanisms to do so.
 If you want to run this code (yes,thanks!) you can use the reactive interpreter like this
-```
+```scala
 val system = ActorSystem("MyActorSystem")
 
 /** A dummy logger to print out all traces */
