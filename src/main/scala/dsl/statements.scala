@@ -39,7 +39,7 @@ trait statements {
         context.env.get("FILE") match {
           case Some(file:File) => 
             try {
-              (context,io.Source.fromFile(getClass.getResource(s"/${file.name}").toString.drop("file:".size)).mkString  )
+              (context,io.Source.fromFile(getClass.getResource(s"/${file.name}").getFile).mkString  )
             } catch {
               case _:Throwable => 
                 (context.copy(exceptionThrown=true),"ERROR! FILE WOZ NT FOUND")
